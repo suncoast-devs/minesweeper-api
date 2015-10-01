@@ -36,7 +36,7 @@ Create a new game
 
 Retrieve an already created game.
 
-The `state` will be one of "new", "playing", "won", or "lost".
+The `state` will be one of `"new"`, `"playing"`, `"won"`, or `"lost"`.
 
 Cell values:
 
