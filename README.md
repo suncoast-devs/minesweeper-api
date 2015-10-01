@@ -9,7 +9,10 @@ This is a description of the "Minesweeper Clone" API.
 Create a new game
 
 + Parameters
-  + difficulty: `1` (number) - Permitted values are: `0` (Easy - 8x8, 10 mines), `1` (Intermediate - 16x16, 40 mines), and `2` (Expert - 24x24, 99 mines)
+  + difficulty: `1` (number) - Permitted values are:
+        - `0` (Easy - 8x8, 10 mines)
+        - `1` (Intermediate - 16x16, 40 mines)
+        - `2` (Expert - 24x24, 99 mines)
 
 + Response 201 (application/json)
 
