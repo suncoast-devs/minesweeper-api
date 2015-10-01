@@ -2,24 +2,26 @@ class Game < ActiveRecord::Base
   serialize :board, Array
   serialize :mine_locations, Array
 
-  EMPTY = " "
-  MINE  = "*"
-  FLAG  = "F"
+  EMPTY = ' '
+  MINE  = '*'
+  FLAG  = 'F'
+  CLEAR = '_'
 
   before_create :make_board
+
   def make_board
-    self.board = size.times.map { |row| size.times.map { |col| EMPTY } }
+    self.board = size.times.map { size.times.map { EMPTY } }
   end
 
-  # Place the right number of mines on the board
-  # but you CAN'T place any at row and col
   def place_mines(row, col)
-    self.state = "playing"
+    self.state = 'playing'
 
-    #
-    # YOUR CODE GOES HERE TO PLACE THE RIGHT NUMBER OF BOMBS
-    #
-    # self.mine_locations = ...
+    while mine_locations.length < mine_count
+      loc = [rand(size), rand(size)]
+      unless loc == [row, col] || mine_locations.include?(loc)
+        mine_locations << loc
+      end
+    end
   end
 
   def flag(row, col)
@@ -34,49 +36,79 @@ class Game < ActiveRecord::Base
     # If we don't have any mines, go ahead and place them
     place_mines(row, col) if mine_locations.empty?
 
+    # If the player is checking a mine space
     if mine_locations.include?([row, col])
-      self.state = "lost"
-      mine_locations.each { |row, col| board[row][col] = MINE }
+      self.state = 'lost'
+      mine_locations.each { |r, c| board[r][c] = MINE }
       return
     end
 
-    board[row][col] = "_"
-
-    (-1..1).each do |row_offset|
-      (-1..1).each do |col_offset|
-        next if (row_offset == 0 && col_offset == 0) || out_of_bounds?(row + row_offset, col + col_offset)
-
-        compute_mines_for(row + row_offset, col + col_offset)
-      end
-    end
+    reveal(row, col)
 
     if board.flatten.count { |cell| [EMPTY, FLAG].include?(cell) } == mine_locations.length
-      self.state = "won"
+      self.state = 'won'
       mine_locations.each { |row, col| board[row][col] = MINE }
     end
   end
 
-  def compute_mines_for(row, col)
+  def reveal(row, col)
     total = 0
-    (-1..1).each do |row_offset|
-      (-1..1).each do |col_offset|
-        next if (row_offset == 0 && col_offset == 0) || out_of_bounds?(row + row_offset, col + col_offset)
+    [-1, 1].each do |y|
+      [-1, 1].each do |x|
+        neighbor = [row + y, col + x]
+        next if out_of_bounds?(*neighbor)
+        next if revealed?(*neighbor)
 
-        if mine_locations.include?([row + row_offset,col + col_offset])
-          total = total + 1
+        if mine_locations.include?(neighbor)
+          total += 1
+        else
+          board[row + y][col + x] = CLEAR
+          reveal(*neighbor)
         end
       end
     end
 
-    board[row][col] = total
+    if total > 0
+      board[row][col] = total
+    end
   end
+
+  # def reveal_neigbor(row, col)
+  #   return if revealed?(row, col)
+  #   if mine_locations.include?([row, col])
+  #
+  #   end
+  # end
+
+  def revealed?(row, col)
+    ![EMPTY, MINE].include?(board[row][col])
+  end
+
+  # def compute_mines_for(row, col)
+  #   total = 0
+  #   (-1..1).each do |y|
+  #     (-1..1).each do |x|
+  #       next if (y == 0 && x == 0) || out_of_bounds?(row + y, col + x)
+  #
+  #       if mine_locations.include?([row + y, col + x])
+  #         total += 1
+  #       end
+  #     end
+  #   end
+  #
+  #   board[row][col] = total
+  # end
 
   def flag_count
     board.flatten.count { |cell| cell == FLAG }
   end
 
   def size
-    [8,16,24][difficulty]
+    [8, 16, 24][difficulty]
+  end
+
+  def mine_count
+    [10, 40, 99][difficulty]
   end
 
   def as_json(*)
@@ -84,7 +116,7 @@ class Game < ActiveRecord::Base
       "id":    id,
       "board": board,
       "state": state,
-      "mines": [10,40,99][difficulty] - flag_count,
+      "mines": [10, 40, 99][difficulty] - flag_count
     }
   end
 end

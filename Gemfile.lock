@@ -13,7 +13,7 @@ GIT
 
 GIT
   remote: git://github.com/rails/rails.git
-  revision: 7db7b287ecd616d61dd09147888d02b74d219dd1
+  revision: 62c82f7ddf0b50aae98a13236bc3ab88c3942d4d
   specs:
     actionmailer (5.0.0.alpha)
       actionpack (= 5.0.0.alpha)
@@ -161,7 +161,6 @@ DEPENDENCIES
   spring
   sprockets!
   sprockets-rails!
-  tzinfo-data
 
 BUNDLED WITH
    1.10.6
