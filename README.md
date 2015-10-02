@@ -4,7 +4,7 @@ This is a description of the "Minesweeper Clone" API.
 
 # Group Game API
 
-## POST /game
+## POST /games
 
 Create a new game
 
@@ -32,7 +32,7 @@ Create a new game
           "mines": 10
         }
 
-## GET /game/{id}
+## GET /games/{id}
 
 Retrieve an already created game.
 
@@ -67,7 +67,7 @@ Cell values:
           "mines": 9
         }
 
-## POST /game/{id}/check
+## POST /games/{id}/check
 
 + Parameters
   + id: `1` (number) - The unique ID for the game
@@ -99,7 +99,7 @@ Cell values:
           "mines": 9
         }
 
-## POST /game/{id}/flag
+## POST /games/{id}/flag
 
 + Parameters
   + id: `1` (number) - The unique ID for the game
