@@ -32,8 +32,7 @@ class Game < ActiveRecord::Base
       ]
 
       banned_locations.concat(mine_locations)
-
-      mine_locations << loc unless neighbors || mine_locations.include?(loc)
+      mine_locations << loc unless banned_locations.include?(loc)
     end
   end
 
