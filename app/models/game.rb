@@ -18,9 +18,22 @@ class Game < ActiveRecord::Base
 
     while mine_locations.length < mine_count
       loc = [rand(size), rand(size)]
-      unless loc == [row, col] || mine_locations.include?(loc)
-        mine_locations << loc
-      end
+
+      banned_locations = [
+        [row - 1, col - 1],
+        [row + 0, col - 1],
+        [row + 1, col - 1],
+        [row - 1, col + 0],
+        [row + 0, col + 0],
+        [row + 1, col + 0],
+        [row - 1, col + 1],
+        [row + 0, col + 1],
+        [row + 1, col + 1]
+      ]
+
+      banned_locations.concat(mine_locations)
+
+      mine_locations << loc unless banned_locations.include?(loc)
     end
   end
 
@@ -52,33 +65,35 @@ class Game < ActiveRecord::Base
   end
 
   def reveal(row, col)
-    total = 0
-    [-1, 1].each do |y|
-      [-1, 1].each do |x|
+    if (count = mine_count_for(row, col)) > 0
+      board[row][col] = count
+      return
+    else
+      board[row][col] = CLEAR
+    end
+
+    (-1..1).each do |y|
+      (-1..1).each do |x|
         neighbor = [row + y, col + x]
+        next if x == 0 && y == 0
         next if out_of_bounds?(*neighbor)
         next if revealed?(*neighbor)
 
-        if mine_locations.include?(neighbor)
-          total += 1
-        else
-          board[row + y][col + x] = CLEAR
-          reveal(*neighbor)
-        end
+        reveal(*neighbor)
       end
-    end
-
-    if total > 0
-      board[row][col] = total
     end
   end
 
-  # def reveal_neigbor(row, col)
-  #   return if revealed?(row, col)
-  #   if mine_locations.include?([row, col])
-  #
-  #   end
-  # end
+  def mine_count_for(row, col)
+    total = 0
+    (-1..1).each do |y|
+      (-1..1).each do |x|
+        total += 1 if mine_locations.include?([row + y, col + x])
+      end
+    end
+
+    total
+  end
 
   def revealed?(row, col)
     ![EMPTY, MINE].include?(board[row][col])
