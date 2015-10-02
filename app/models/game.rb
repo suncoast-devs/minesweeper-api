@@ -33,12 +33,16 @@ class Game < ActiveRecord::Base
 
       banned_locations.concat(mine_locations)
 
-      mine_locations << loc unless banned_locations.include?(loc)
+      mine_locations << loc unless neighbors || mine_locations.include?(loc)
     end
   end
 
   def flag(row, col)
-    board[row][col] = FLAG
+    if board[row][col] == EMPTY
+      board[row][col] = FLAG
+    elsif board[row][col] == FLAG
+      board[row][col] = EMPTY
+    end
   end
 
   def out_of_bounds?(row, col)
