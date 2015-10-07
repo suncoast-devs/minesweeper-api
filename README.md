@@ -44,6 +44,7 @@ Cell values:
 - `_` An empty revealed cell
 - `F` An unrevealed flagged cell
 - `*` A cell with a bomb in it (only show after a game is won or lost)
+- `@` A flagged cell with a bomb in it (only show after a game is won or lost)
 - `1`-`8` The number of neighboring cells that contain a mine.
 
 + Parameters

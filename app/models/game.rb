@@ -5,6 +5,7 @@ class Game < ActiveRecord::Base
   EMPTY = ' '
   MINE  = '*'
   FLAG  = 'F'
+  SAFE  = '@'
   CLEAR = '_'
 
   before_create :make_board
@@ -55,7 +56,14 @@ class Game < ActiveRecord::Base
     # If the player is checking a mine space
     if mine_locations.include?([row, col])
       self.state = 'lost'
-      mine_locations.each { |r, c| board[r][c] = MINE }
+      mine_locations.each do |r, c|
+        if board[r][c] == FLAG
+          board[r][c] = SAFE
+        else
+          board[r][c] = MINE
+        end
+      end
+
       return
     end
 
