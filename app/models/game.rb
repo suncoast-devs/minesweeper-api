@@ -142,7 +142,8 @@ class Game < ActiveRecord::Base
       "id":    id,
       "board": board,
       "state": state,
-      "mines": [10, 40, 99][difficulty] - flag_count
+      "mines": [10, 40, 99][difficulty] - flag_count,
+      "difficulty": difficulty
     }
   end
 end
