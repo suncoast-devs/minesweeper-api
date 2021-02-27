@@ -2,11 +2,11 @@ class Game < ActiveRecord::Base
   serialize :board, Array
   serialize :mine_locations, Array
 
-  EMPTY = ' '
-  MINE  = '*'
-  FLAG  = 'F'
-  SAFE  = '@'
-  CLEAR = '_'
+  EMPTY = " "
+  MINE = "*"
+  FLAG = "F"
+  SAFE = "@"
+  CLEAR = "_"
 
   before_create :make_board
 
@@ -15,7 +15,7 @@ class Game < ActiveRecord::Base
   end
 
   def place_mines(row, col)
-    self.state = 'playing'
+    self.state = "playing"
 
     while mine_locations.length < mine_count
       loc = [rand(size), rand(size)]
@@ -29,7 +29,7 @@ class Game < ActiveRecord::Base
         [row + 1, col + 0],
         [row - 1, col + 1],
         [row + 0, col + 1],
-        [row + 1, col + 1]
+        [row + 1, col + 1],
       ]
 
       banned_locations.concat(mine_locations)
@@ -55,7 +55,7 @@ class Game < ActiveRecord::Base
 
     # If the player is checking a mine space
     if mine_locations.include?([row, col])
-      self.state = 'lost'
+      self.state = "lost"
       mine_locations.each do |r, c|
         if board[r][c] == FLAG
           board[r][c] = SAFE
@@ -70,7 +70,7 @@ class Game < ActiveRecord::Base
     reveal(row, col)
 
     if board.flatten.count { |cell| [EMPTY, FLAG].include?(cell) } == mine_locations.length
-      self.state = 'won'
+      self.state = "won"
       mine_locations.each { |row, col| board[row][col] = MINE }
     end
   end
@@ -110,21 +110,6 @@ class Game < ActiveRecord::Base
     ![EMPTY, MINE].include?(board[row][col])
   end
 
-  # def compute_mines_for(row, col)
-  #   total = 0
-  #   (-1..1).each do |y|
-  #     (-1..1).each do |x|
-  #       next if (y == 0 && x == 0) || out_of_bounds?(row + y, col + x)
-  #
-  #       if mine_locations.include?([row + y, col + x])
-  #         total += 1
-  #       end
-  #     end
-  #   end
-  #
-  #   board[row][col] = total
-  # end
-
   def flag_count
     board.flatten.count { |cell| cell == FLAG }
   end
@@ -139,11 +124,11 @@ class Game < ActiveRecord::Base
 
   def as_json(*)
     {
-      "id":    id,
+      "id": id,
       "board": board,
       "state": state,
       "mines": [10, 40, 99][difficulty] - flag_count,
-      "difficulty": difficulty
+      "difficulty": difficulty,
     }
   end
 end

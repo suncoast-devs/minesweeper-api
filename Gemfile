@@ -1,25 +1,23 @@
-source 'https://rubygems.org'
-ruby '2.2.2'
+# frozen_string_literal: true
 
-gem 'rails', github: 'rails/rails'
-gem 'sprockets-rails', github: 'rails/sprockets-rails'
-gem 'sprockets', github: 'rails/sprockets'
-gem 'sass-rails', github: 'rails/sass-rails'
-gem 'arel', github: 'rails/arel'
-gem 'rack', github: 'rack/rack'
+ruby "2.6.6"
 
-gem 'pg'
-gem 'puma'
+source "https://rubygems.org"
 
-gem 'active_model_serializers', '~> 0.10.0.rc2'
-gem 'rack-cors', require: 'rack/cors'
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-group :development, :test do
-  gem 'byebug'
-end
+gem "sinatra", "~> 2.1"
+gem "rack-contrib", "~> 2.3"
+gem "sinatra-contrib", "~> 2.1"
+gem "amazing_print", "~> 1.2"
+gem "activerecord", "~> 6.1"
+gem "sinatra-activerecord", "~> 2.0"
 
 group :development do
-  gem 'spring'
+  gem "sqlite3"
 end
+gem "pg", "~> 1.2"
 
-gem 'rails_12factor', group: :production
+gem "rake", "~> 13.0"
+
+gem "sinatra-cross_origin", "~> 0.4.0"

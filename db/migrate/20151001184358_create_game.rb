@@ -1,4 +1,4 @@
-class CreateGame < ActiveRecord::Migration
+class CreateGame < ActiveRecord::Migration[6.1]
   def change
     create_table :games do |t|
       t.string :game
@@ -6,6 +6,8 @@ class CreateGame < ActiveRecord::Migration
       t.string :board
       t.string :mine_locations
       t.integer :difficulty
+
+      t.timestamps
     end
   end
 end
