@@ -99,7 +99,9 @@ def parse_body
   data = nil
 
   begin
-    data = JSON.parse(request.body.read)
+    body = request.body.read
+
+    data = body.empty? ? {} : JSON.parse(body)
   rescue JSON::ParserError
     halt 400, json(error: "Sorry, your JSON request could not be parsed")
   end
