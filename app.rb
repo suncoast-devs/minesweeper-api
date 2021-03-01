@@ -34,7 +34,7 @@ get "/" do
   send_file File.join(settings.public_folder, "index.html")
 end
 
-post "/games" do
+post "/games/?" do
   data = parse_body
 
   # Remove all the old games.
@@ -46,7 +46,7 @@ post "/games" do
   json(game)
 end
 
-get "/games/{id}" do
+get "/games/{id}/?" do
   data = parse_body
 
   game = Game.find(data["id"])
@@ -54,7 +54,7 @@ get "/games/{id}" do
   json(game)
 end
 
-post "/games/{id}/flag" do
+post "/games/{id}/flag/?" do
   data = parse_body
 
   game = Game.find(data["id"])
@@ -66,7 +66,7 @@ post "/games/{id}/flag" do
   json(game)
 end
 
-post "/games/{id}/check" do
+post "/games/{id}/check/?" do
   data = parse_body
 
   game = Game.find(data["id"])
