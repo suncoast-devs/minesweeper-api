@@ -7,6 +7,9 @@
 # Ignore bundler config.
 /.bundle
 
+# Ignore any sqlite files
+db/*.sqlite3
+
 # Ignore all logfiles and tempfiles.
 /log/*
 /tmp/*
