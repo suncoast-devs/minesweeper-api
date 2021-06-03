@@ -39,7 +39,7 @@ post "/games/?" do
 
   # Remove all the old games.
   # This makes sure that we do not fill the database
-  Game.where("created_at > ?", Date.today - 30).delete_all
+  Game.where("created_at < ?", Date.today - 30).delete_all
 
   game = Game.create(difficulty: data["difficulty"].to_i, state: "new")
 
