@@ -43,6 +43,7 @@ post "/games/?" do
 
   game = Game.create(difficulty: data["difficulty"].to_i, state: "new")
 
+  status 201
   json(game)
 end
 
