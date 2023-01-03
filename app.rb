@@ -1,17 +1,11 @@
 require "sinatra"
 require "sinatra/json"
-require "sinatra/activerecord"
 require "json"
-require "amazing_print"
 
 require_relative "./game.rb"
 
 if ENV["PORT"]
   set :port, ENV["PORT"]
-end
-
-if ENV["RACK_ENV"] != "production"
-  set :database_file, "./config/database.yml"
 end
 
 configure do
@@ -39,7 +33,7 @@ post "/games/?" do
 
   # Remove all the old games.
   # This makes sure that we do not fill the database
-  Game.where("created_at < ?", Date.today - 30).delete_all
+  Game.where("created_at < ?", Date.today - 3).delete_all
 
   game = Game.create(difficulty: data["difficulty"].to_i, state: "new")
 
